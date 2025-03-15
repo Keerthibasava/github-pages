@@ -1,187 +1,136 @@
-const questions = [
-        {
-            question: "What is 2 + 2?",
-            answers: [
-                { text: "3", correct: false },
-                { text: "4", correct: true },
-                { text: "5", correct: false },
-                { text: "6", correct: false }
-            ]
-        },
-        {
-            question: "What is the capital of France?",
-            answers: [
-                { text: "Berlin", correct: false }, 
-                { text: "Madrid", correct: false },
-                { text: "Paris", correct: true },
-                { text: "Rome", correct: false }
-            ]
-        },
-        {
-            question: "which language runs in a web browser?",
-            answers: [
-                { text: "java", correct: false }, 
-                { text: "c", correct: false },
-                { text: "javascript", correct: true },
-                { text: "python", correct: false }
-            ]
-        },
-        {
-            question: "what does CSS stand for?",
-            answers: [
-                { text: "centralstyle sheets", correct: false }, 
-                { text: "cascading style sheets", correct: true },
-                { text: "cascading simple sheets", correct: false},
-                { text: "cars SUVs sailboats", correct: false }
-            ] 
-        },
-        {
-            question: "who invented java and when?",
-            answers: [
-                { text: "Brendan Eich, 1995", correct: false }, 
-                { text: "James Gosling,1991", correct: true },
-                { text: "Tim Berners Lee,1989", correct: false},
-                { text: "Guido van Rossum,1990", correct: false }
-            ] 
-        },
-        {
-            question: "What does HTTP stand for?",
-            answers: [
-                { text: "Hypertext Transit Protocol", correct: false }, 
-                { text: "Hypertext Transfer Protocol", correct:  false },
-                { text: "Hypertext Transmitter Protocol", correct: false},
-                { text: "Hypertext Transfer Protocol", correct: true }
-            ]   
-        },
-        {
-            question: "in which year was javascript invented?",
-            answers: [
-                { text: "1995", correct: true}, 
-                { text: "1990", correct:  false },
-                { text: "2000", correct: false},
-                { text: "2005", correct: false }
-            ]     
-        },
-        {
-            question: "Which HTML tag is used to define an unordered list?",
-            answers: [
-                { text: "<ol>", correct: false}, 
-                { text: "<li>", correct:  false },
-                { text: "<ul>", correct: true},
-                { text: "<list>", correct: false }
-            ]     
-        },
-        {
-            question: "Which CSS unit is relative to the font-size of the element itself?",
-            answers: [
-                { text: "vw", correct: false}, 
-                { text: "%", correct:  false },
-                { text: "px", correct: false},
-                { text: "em", correct: true }
-            ]     
-        },
-        {
-            question: "Which HTML tag is used to create a hyperlink?",
-            answers: [
-                { text: "<link", correct: false}, 
-                { text: "<url>", correct:  false },
-                { text: "<a>", correct: true},
-                { text: "<hyperlink", correct: false }
-            ]     
-        }
-           
-       
-    ];
+var cardsArray = [
+    {    'name': 'CSS',    'img': 'https://github.com/robgmerrill/img/blob/master/css3-logo.png?raw=true',  },
+    {    'name': 'HTML',    'img': 'https://github.com/robgmerrill/img/blob/master/html5-logo.png?raw=true',  },
+    {    'name': 'jQuery',    'img': 'https://github.com/robgmerrill/img/blob/master/jquery-logo.png?raw=true',  },
+    {    'name': 'JS',    'img': 'https://github.com/robgmerrill/img/blob/master/js-logo.png?raw=true',  },
+    {    'name': 'Node',    'img': 'https://github.com/robgmerrill/img/blob/master/nodejs-logo.png?raw=true',  },
+    {    'name': 'Photo Shop',    'img': 'https://github.com/robgmerrill/img/blob/master/photoshop-logo.png?raw=true',  },
+    {    'name': 'PHP',    'img': 'https://github.com/robgmerrill/img/blob/master/php-logo_1.png?raw=true',  },
+    {    'name': 'Python',    'img': 'https://github.com/robgmerrill/img/blob/master/python-logo.png?raw=true',  },
+    {    'name': 'Ruby',    'img': 'https://github.com/robgmerrill/img/blob/master/rails-logo.png?raw=true',  },
+    {    'name': 'Sass',    'img': 'https://github.com/robgmerrill/img/blob/master/sass-logo.png?raw=true',  },
+    {    'name': 'Sublime',    'img': 'https://github.com/robgmerrill/img/blob/master/sublime-logo.png?raw=true',  },
+    {    'name': 'Wordpress',    'img': 'https://github.com/robgmerrill/img/blob/master/wordpress-logo.png?raw=true',  },
+  ];
+
+//Duplicate cardsArray to create a match for each card
+var gameGrid = cardsArray.concat(cardsArray);
+
+//Randomize game grid on each load
+gameGrid.sort(function() {
+    return 0.5 - Math.random();
+})
+
+//grab the div with an id of game-board and assign to a variable game
+var game = document.getElementById("game-board");
+
+//Create a section element and assign it to variable grid
+var grid = document.createElement('section');
+
+//Give section element a class of grid.
+grid.setAttribute('class', 'grid');
+
+//Append the grid section to the game-board div
+game.appendChild(grid);
+
+//Loop through each item in our cards array
+for(var i =0; i < gameGrid.length ; i++) {
+
+    //create a div element and assign to variable card
+    var card = document.createElement('div');
+    //Apply a card class to that div
+    //card.classList.add('card');
+    card.setAttribute('class','card');
+    //Set the data-name attribute of the div to the cardsArray name
+    //card.dataset.name = cardsArray[i].name;
+    card.setAttribute('data-name',gameGrid[i].name);
     
-    const questionElement = document.getElementById("question");
-    const answerButtons = document.getElementById("answers");
-    const nextButton = document.getElementById("next-btn");
-    const timerElement = document.getElementById("time");
-    const scoreElement = document.getElementById("score");
-    
-    let currentQuestionIndex = 0;
-    let score = 0;
-    let timeLeft = 30;
-    let timer;
-    
-    function startQuiz() {
-        currentQuestionIndex = 0;
-        score = 0;
-        timeLeft = 30;
-        nextButton.style.display = "none";
-        scoreElement.innerText = "";
-        startTimer();
-        showQuestion();
+    //Create front of card
+    var front = document.createElement('div');
+    front.classList.add('front');
+
+    //Create back of card´
+    var back = document.createElement('div');
+    back.classList.add('back');
+    back.style.backgroundImage = `url(${gameGrid[i].img})`;
+
+    //Append card to grid
+    grid.appendChild(card);
+    card.appendChild(front);
+    card.appendChild(back);
+}
+
+var firstGuess='';
+var secondGuess = '';
+
+
+//Set count to 0
+var count = 0;
+var previousTarget = null;
+
+var delay = 1200; 
+
+
+
+//Add match CSS
+var match = function() {
+    var selected = document.querySelectorAll('.selected');
+    //loop through the array like object containing 'selected' class
+    for (i=0; i<selected.length; i++) {
+        selected[i].classList.add('match');
     }
-    
-    function startTimer() {
-        clearInterval(timer);
-        timer = setInterval(() => {
-            timeLeft--;
-            timerElement.innerText = timeLeft;
-            if (timeLeft <= 0) {
-                clearInterval(timer);
-                alert("Time's up!");
-                nextQuestion();
-            }
-        }, 1000);
+};
+
+// Reset guesses after two attempts
+var resetGuesses = function() {
+    firstGuess = '';
+    secondGuess = '';
+    count = 0;
+    previousTarget = null;
+
+    var selected = document.querySelectorAll('.selected');
+    for ( i = 0; i < selected.length; i++) {
+        selected[i].classList.remove('selected');
+
     }
-    
-    function showQuestion() {
-        resetState();
-        let currentQuestion = questions[currentQuestionIndex];
-        questionElement.innerText = currentQuestion.question;
-        
-            currentQuestion.answers.forEach(answer => {
-            const button = document.createElement("button");
-            button.innerText = answer.text;
-            button.classList.add("btn");
-            button.addEventListener("click", () => selectAnswer(button, answer.correct));
-            answerButtons.appendChild(button);
-        });
+};
+
+
+//Add event listener to grid
+grid.addEventListener('click', function(event) {
+    //Declare variable to target our clicked item
+    var clicked = event.target;
+    //Do not allow the grid section itself to be selected;
+    //only select divs inside the grid
+    if(clicked.nodeName === 'SECTION' || clicked === previousTarget || clicked.parentNode.classList.contains ('match') || clicked.parentNode.classList.contains('selected')) {
+        return;
     }
+
+    //We only want to add 'selected' class if the current count is less than 2
+    if (count < 2) {
+        count++;
     
-    function resetState() { 
-        while (answerButtons.firstChild) {
-        answerButtons.removeChild(answerButtons.firstChild);
-        }
+    if (count === 1) {
+        //Assign firts guess
+        firstGuess = clicked.parentNode.dataset.name;
+        clicked.parentNode.classList.add('selected');
+    } else {
+        //Assign second guess
+        secondGuess = clicked.parentNode.dataset.name;
+        clicked.parentNode.classList.add('selected');
     }
-    
-    function selectAnswer(button, isCorrect) {
-        clearInterval(timer);
-        if (isCorrect) {
-            button.classList.add("correct");
-            score++;
+    //If both guesses are not empty 
+    if (firstGuess !== '' && secondGuess !== '') {
+        //An the firtsGuess macthes secondGuess
+        if (firstGuess === secondGuess) {
+            //Run the macth function
+            setTimeout(match,delay);
+            setTimeout(resetGuesses,delay);
         } else {
-            button.classList.add("wrong");
-        }
-        Array.from(answerButtons.children).forEach(btn => {
-            btn.disabled = true;
-        });
-        nextButton.style.display = "block";
-    }
-    
-    function nextQuestion() {
-        currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) {
-            timeLeft = 30;
-            startTimer();
-            showQuestion();
-        } else {
-            endQuiz();
+            setTimeout(resetGuesses,delay);
         }
     }
-    
-    function endQuiz() {
-        clearInterval(timer);
-        questionElement.innerText = "Quiz Completed!";
-        answerButtons.innerHTML = "";
-        scoreElement.innerText = `Your Score: ${score} / ${questions.length}`;
-        nextButton.innerText = "Restart Quiz";
-        nextButton.style.display = "block";
-        nextButton.addEventListener("click", startQuiz);
+    previousTarget = clicked;
     }
-    
-    nextButton.addEventListener("click", nextQuestion);
-    
-    startQuiz();
+
+});
